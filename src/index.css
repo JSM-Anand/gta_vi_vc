@@ -1,0 +1,148 @@
+@import 'tailwindcss';
+
+/* GTA ArtDeco — the typeface used on rockstargames.com/VI.
+   Fallback faces use Rockstar's own metric overrides so Arial occupies
+   the same space while the real font loads (no layout shift). */
+@font-face {
+  font-family: 'ArtDeco';
+  src: url('./assets/fonts/ArtDeco-Regular.woff') format('woff');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ArtDeco';
+  src: url('./assets/fonts/ArtDeco-Medium.woff') format('woff');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ArtDeco';
+  src: url('./assets/fonts/ArtDeco-Bold.woff') format('woff');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ArtDeco Condensed';
+  src: url('./assets/fonts/ArtDeco-CondensedBold.woff') format('woff');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ArtDeco Condensed';
+  src: url('./assets/fonts/ArtDeco-CondensedHeavy.woff') format('woff');
+  font-weight: 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'ArtDeco Fallback';
+  src: local('Arial');
+  ascent-override: 92.35%;
+  descent-override: 27.16%;
+  line-gap-override: 0%;
+  size-adjust: 110.45%;
+}
+@font-face {
+  font-family: 'ArtDeco Condensed Fallback';
+  src: local('Arial');
+  ascent-override: 131.84%;
+  descent-override: 38.78%;
+  line-gap-override: 0%;
+  size-adjust: 77.37%;
+}
+
+@theme {
+  --color-ink: #0c0d1b; /* page background on rockstargames.com/VI */
+  --color-pink: #ffb4c7; /* Pre-Order button (start of its pulse) */
+  --color-plum: #342d50; /* Pre-Order button text (start of its pulse) */
+  --color-cream: #fff9cb; /* nav icons on hover */
+  --color-glow: #1f1f38; /* cursor glow */
+
+  /* Scroll arrow pulse, as on the live site */
+  --animate-arrow-pulse: arrow-pulse 1s ease-in-out infinite alternate;
+
+  @keyframes arrow-pulse {
+    0% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  --breakpoint-hd: 90rem; /* 1440px, where the live site's layout scale steps down to 1vw */
+
+  /* Loader: one 2.15s cycle, keyframes copied from the live site */
+  --animate-loader-shine: loader-shine 2.15s cubic-bezier(0.77, 0, 0.175, 1) infinite both;
+  --animate-loader-fill: loader-fill 2.15s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite both;
+  --animate-loader-glow: loader-glow 2.15s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite both;
+
+  @keyframes loader-shine {
+    0% {
+      top: -40%;
+      left: -40%;
+    }
+    92%,
+    100% {
+      top: 80%;
+      left: 105%;
+    }
+  }
+  @keyframes loader-fill {
+    0%,
+    22%,
+    92%,
+    100% {
+      background-color: #1f1f38;
+    }
+    42% {
+      background-color: #38365d;
+    }
+  }
+  @keyframes loader-glow {
+    0%,
+    22%,
+    92%,
+    100% {
+      opacity: 0.2;
+    }
+    42% {
+      opacity: 1;
+    }
+  }
+
+  --font-sans: 'ArtDeco', 'ArtDeco Fallback', sans-serif;
+  --font-condensed: 'ArtDeco Condensed', 'ArtDeco Condensed Fallback', sans-serif;
+}
+
+/* Loader background: navy at the top fading to near-black, as on the live site */
+@utility bg-loader {
+  background: linear-gradient(189deg, #1f1f38 0.55%, #18182d 30.38%, #111222 65.19%, #0c0d1b 100%);
+}
+
+@layer base {
+  /* Layout unit from md up. Steps like the live site: 4/3vw, 8/7vw from lg, 1vw from hd. */
+  :root {
+    --u: calc(4vw / 3);
+
+    @variant lg {
+      --u: calc(8vw / 7);
+    }
+    @variant hd {
+      --u: 1vw;
+    }
+  }
+
+  html {
+    @apply bg-ink;
+    color-scheme: dark;
+  }
+
+  /* No scrolling while the loader is up */
+  html:has([data-loading]) {
+    overflow: clip;
+  }
+
+  body {
+    @apply min-h-dvh font-sans font-medium text-white antialiased;
+  }
+}
