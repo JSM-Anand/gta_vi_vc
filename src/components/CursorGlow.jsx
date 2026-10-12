@@ -7,8 +7,8 @@ gsap.registerPlugin(useGSAP)
 // Soft navy glow behind the page that trails the cursor, as on rockstargames.com/VI.
 // It rests at half strength; over anything marked data-glow it moves to that element's
 // centre at full strength. On touch screens it stays in the top-left corner.
-// The outer layer is faded on scroll by animations/heroScroll.js (--scroll-fade); hovering an
-// element overrides that fade (--hover), as on the live site.
+// The outer layer is faded on scroll by animations/heroScroll.js (--scroll-fade) and brought back
+// further down by animations/extendedLook.js (--return); hovering an element overrides both (--hover).
 function CursorGlow() {
   const glow = useRef(null)
 
@@ -53,7 +53,7 @@ function CursorGlow() {
   })
 
   return (
-    <div data-scroll="glow" aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 [opacity:max(var(--scroll-fade,1),var(--hover,0))]">
+    <div data-scroll="glow" aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 [opacity:max(var(--scroll-fade,1),var(--hover,0),var(--return,0))]">
       {/* Centred on (x, y): 1.5x the larger side of the window, so it always reaches the far corner */}
       <div
         ref={glow}

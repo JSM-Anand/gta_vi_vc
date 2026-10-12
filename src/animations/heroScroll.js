@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP)
 //   - the poster, date, button and badges fade out; the logo lingers and fades more slowly
 //   - the cursor glow fades away
 //   - a Pre-Order pill appears in the nav once the hero's button has gone
-//   - the next section fades in where the hero was
+//   - the next section (animations/extendedLook.js) fades in where the hero was
 // Positions are fractions of the window height, so they scale with it as on the live site.
 export function useHeroScroll() {
   useGSAP(() => {
@@ -45,11 +45,6 @@ export function useHeroScroll() {
         .fromTo('[data-scroll="glow"]', { '--scroll-fade': 1 }, { '--scroll-fade': 0, ease: 'none', duration: 0.51 }, 0.35)
         .set({}, {}, 1) // the timeline spans the whole pin
 
-      gsap.fromTo(
-        '[data-scroll="next"]',
-        { opacity: 0 },
-        { opacity: 1, ease: 'power3.in', scrollTrigger: { start: at(0.61), end: at(1.18), scrub: true } },
-      )
 
       ScrollTrigger.create({
         start: at(mobile ? 0.575 : 0.52),
