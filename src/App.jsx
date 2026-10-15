@@ -12,7 +12,8 @@ import Loader from './components/Loader'
 import Navbar from './components/Navbar'
 import ViceCity from './components/ViceCity'
 
-function App() {
+// The page. `heroImages` swaps the hero's artwork (see heroImages.js); the /ai route passes the AI set.
+function App({ heroImages }) {
   const [loading, setLoading] = useState(true)
   const [intro, setIntro] = useState(false)
 
@@ -30,7 +31,7 @@ function App() {
       <CursorGlow />
       <Navbar />
       <main>
-        <Hero />
+        <Hero images={heroImages} />
         <ExtendedLook />
         <ViceCity />
         <Features />

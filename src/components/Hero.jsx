@@ -1,24 +1,10 @@
 import { useRef } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
+import { HERO_IMAGES } from '../heroImages'
 import { PS5Logo, XboxSeriesLogo } from './PlatformLogos'
 
 gsap.registerPlugin(useGSAP)
-
-const desktop = import.meta.glob('../assets/hero/desktop/*.avif', { eager: true, import: 'default' })
-const mobile = import.meta.glob('../assets/hero/mobile/*.avif', { eager: true, import: 'default' })
-
-// Each hero image has a desktop (16:9) and a mobile (square) version with the same name
-const art = (name) => ({
-  desktop: desktop[`../assets/hero/desktop/${name}.avif`],
-  mobile: mobile[`../assets/hero/mobile/${name}.avif`],
-})
-const POSTER = art('poster')
-const POSTER_LOGO = art('poster-logo')
-const SHARDS = Array.from({ length: 9 }, (_, i) => art(`shard-0${i + 1}`))
-const FILLER = art('shard-10')
-const LOGO_VI = art('logo-vi')
-const LOGO_GTA = art('logo-gta')
 
 const MOBILE = '(max-width: 767px)'
 
@@ -72,8 +58,11 @@ function ScrollArrow() {
 // The intro (animations/heroIntro.js) draws on the canvas and targets the data-intro attributes;
 // the scroll effect (animations/heroScroll.js) pins the section, shrinks the content layer and
 // fades it through --hero-fade (a filter, so it doesn't fight the intro's opacity tweens).
-function Hero() {
+function Hero({ images = HERO_IMAGES.original }) {
   const button = useRef(null)
+  const art = (name) => ({ desktop: images.desktop[name], mobile: images.mobile[name] })
+  const SHARDS = Array.from({ length: 9 }, (_, i) => art(`shard-0${i + 1}`))
+  const FILLER = art('shard-10')
 
   // Pre-Order button: a slow colour pulse, interrupted by a hover/focus state
   useGSAP(() => {
@@ -131,17 +120,17 @@ function Hero() {
                 <Art src={FILLER} />
               </div>
               <div data-intro-src="vi">
-                <Art src={LOGO_VI} />
+                <Art src={art('logo-vi')} />
               </div>
               <div data-intro-src="gta">
-                <Art src={LOGO_GTA} />
+                <Art src={art('logo-gta')} />
               </div>
             </div>
 
             {/* Static poster: the logo layer sits exactly over the logo baked into the poster */}
             <div data-intro="poster" className="absolute inset-0">
-              <Art src={POSTER} alt="Grand Theft Auto VI key art" fetchPriority="high" className="[filter:opacity(var(--hero-fade,1))]" />
-              <Art src={POSTER_LOGO} data-scroll="poster-logo" />
+              <Art src={art('poster')} alt="Grand Theft Auto VI key art" fetchPriority="high" className="[filter:opacity(var(--hero-fade,1))]" />
+              <Art src={art('poster-logo')} data-scroll="poster-logo" />
             </div>
           </div>
 
