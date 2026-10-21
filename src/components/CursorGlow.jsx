@@ -8,7 +8,9 @@ gsap.registerPlugin(useGSAP)
 // It rests at half strength; over anything marked data-glow it moves to that element's
 // centre at full strength. On touch screens it stays in the top-left corner.
 // The outer layer is faded on scroll by animations/heroScroll.js (--scroll-fade) and brought back
-// further down by animations/extendedLook.js (--return); hovering an element overrides both (--hover).
+// further down (--return): as each set of cards arrives it returns and once they're near the top it
+// fades again (extendedLook.js, ultimateEdition.js), until viceCity.js brings it back for good.
+// Hovering an element overrides both (--hover).
 function CursorGlow() {
   const glow = useRef(null)
 

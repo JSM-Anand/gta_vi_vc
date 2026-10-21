@@ -59,6 +59,15 @@ export function useExtendedLookScroll() {
       out($('image'), 2.05, 2.86)
       out($('title'), 2.05, 3.05)
       out($('play'), 2.45, 2.75)
+
+      // The cursor glow fades again once the cards are near the top, as the Ultimate Edition
+      // backdrop comes in (animations/ultimateEdition.js brings it back for its own cards)
+      gsap.to('[data-scroll="glow"]', {
+        '--return': 0,
+        ease: 'none',
+        immediateRender: false,
+        scrollTrigger: { trigger: $('cards'), start: 'bottom center-=40%', end: '+=20%', scrub: true },
+      })
     })
   })
 }

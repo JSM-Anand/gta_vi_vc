@@ -3,7 +3,14 @@
 // The scroll and pointer animation lives in animations/features.js and targets the data-feature attributes.
 // From md up, sizes are multiples of --u (defined in index.css); phones use vw like the live site.
 
-// Artwork is our own, generated and hosted on Cloudinary. The sources are 4:3 and 3:2, so Cloudinary
+import mediaArt from '../assets/images/mediaDesktop.11iioep6d3wsf.avif'
+import musicArt from '../assets/images/musicDesktop.0zwcbzhynnsc-.avif'
+import leonidaArt from '../assets/images/onlyInLeonidaDesktop.15y2n40f3axwo.avif'
+import ArrowIcon from './ArrowIcon'
+
+// The / route uses Rockstar's card artwork (already 5:2 and composed for the text side; there are no
+// phone versions, so phones cover-crop the desktop image).
+// The /ai route uses our own artwork, generated and hosted on Cloudinary. The sources are 4:3 and 3:2, so Cloudinary
 // crops them to each layout around the subject (g_auto): 5:2 for desktop, portrait for phones.
 const IMG = 'https://res.cloudinary.com/dtwvlmxqc/image/upload'
 const art = (id, crop, width) => `${IMG}/${crop},w_${width}/f_auto,q_auto/${id}`
@@ -17,6 +24,7 @@ const CARDS = [
     body: 'Preview hand-picked stations from the biggest and widest-ranging selection of in-game radio yet, pre-order GTAVI: The Album, and more.',
     cta: 'Explore More',
     image: 'v1791951674/saoijl3xv1pymvgl9yhm',
+    original: musicArt,
     colors: { bg: '#4b2f54', eyebrow: '#fee8ea', button: '#ffd4a8', buttonHover: '#ffc080', buttonText: '#0f0c1a', glow: '#583660' },
   },
   {
@@ -25,7 +33,8 @@ const CARDS = [
     body: 'Vice City, USA. The darkest side of the sunniest place in America.',
     cta: 'Explore More',
     image: 'v1791951960/yef2z4tdg5i4yraf3bua',
-    // Text sits on the right here, so the desktop crop is mirrored to put the swimmer on the left
+    original: leonidaArt,
+    // Text sits on the right here, so the AI desktop crop is mirrored to put the swimmer on the left
     right: true,
     colors: { bg: '#2c3868', eyebrow: '#d9f3fe', button: '#ffc5b8', buttonHover: '#fcae9c', buttonText: '#0d0c1a', glow: '#324275' },
   },
@@ -35,23 +44,12 @@ const CARDS = [
     body: 'Download and share official videos, screenshots, and more.',
     cta: 'See All',
     image: 'v1791952047/tg77xwan0btlw6fdx9aj',
+    original: mediaArt,
     colors: { bg: '#162623', eyebrow: '#d1ddb0', button: '#ffdf9e', buttonHover: '#fbd383', buttonText: '#071012', glow: '#243830' },
   },
 ]
 
-function ArrowIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="size-[4vw] md:size-[calc(var(--u)*1.25)]">
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M19.7071 11.2929C20.0976 11.6834 20.0976 12.3166 19.7071 12.7071L12.7071 19.7071C12.3166 20.0976 11.6834 20.0976 11.2929 19.7071C10.9024 19.3166 10.9024 18.6834 11.2929 18.2929L16.5858 13H5C4.44772 13 4 12.5523 4 12C4 11.4477 4.44772 11 5 11H16.5858L11.2929 5.70711C10.9024 5.31658 10.9024 4.68342 11.2929 4.29289C11.6834 3.90237 12.3166 3.90237 12.7071 4.29289L19.7071 11.2929Z"
-      />
-    </svg>
-  )
-}
-
-function FeatureCard({ eyebrow, title, body, cta, image, right, colors }) {
+function FeatureCard({ eyebrow, title, body, cta, image, original, right, colors }) {
   const desktopCrop = `c_fill,ar_5:2,g_auto${right ? ',a_hflip' : ''}`
   const mobileCrop = 'c_fill,ar_2:3,g_auto'
 
@@ -70,14 +68,16 @@ function FeatureCard({ eyebrow, title, body, cta, image, right, colors }) {
         aria-hidden="true"
         className={`absolute inset-0 z-1 opacity-80 transition-opacity duration-1000 ease-out [mask-image:linear-gradient(#000_0%,#000_28.333vw,rgb(0_0_0/0.44)_56.667vw,rgb(0_0_0/0.1)_100%)] group-hover:opacity-100 group-focus-visible:opacity-100 ${right ? 'md:[mask-image:radial-gradient(100%_200%_at_calc(100%+var(--mx))_var(--my),rgb(0_0_0/0.28)_0%,rgb(0_0_0/0.48)_52%,#000_87%)]' : 'md:[mask-image:radial-gradient(100%_200%_at_var(--mx)_var(--my),rgb(0_0_0/0.28)_0%,rgb(0_0_0/0.48)_52%,#000_87%)]'}`}
       >
-        <source
-          media="(min-width: 768px)"
-          srcSet={DESKTOP_WIDTHS.map((w) => `${art(image, desktopCrop, w)} ${w}w`).join(', ')}
-          sizes="85vw"
-        />
+        {!original && (
+          <source
+            media="(min-width: 768px)"
+            srcSet={DESKTOP_WIDTHS.map((w) => `${art(image, desktopCrop, w)} ${w}w`).join(', ')}
+            sizes="85vw"
+          />
+        )}
         <img
-          src={art(image, mobileCrop, 800)}
-          srcSet={MOBILE_WIDTHS.map((w) => `${art(image, mobileCrop, w)} ${w}w`).join(', ')}
+          src={original ?? art(image, mobileCrop, 800)}
+          srcSet={original ? undefined : MOBILE_WIDTHS.map((w) => `${art(image, mobileCrop, w)} ${w}w`).join(', ')}
           sizes="85vw"
           alt=""
           className="size-full object-cover object-top md:object-center"
@@ -99,7 +99,8 @@ function FeatureCard({ eyebrow, title, body, cta, image, right, colors }) {
   )
 }
 
-function Features() {
+// `ai` (the /ai route) swaps Rockstar's artwork for our own
+function Features({ ai }) {
   return (
     <section
       id="features"
@@ -107,7 +108,7 @@ function Features() {
       className="flex flex-col gap-[7vw] px-[7.5vw] pt-[10vw] pb-[20vw] md:gap-[calc(var(--u)*2)] md:pt-[calc(var(--u)*4)] md:pb-[calc(var(--u)*8)] lg:px-[10vw] hd:px-[13vw] fhd:px-[min(16vw,409.6px)]"
     >
       {CARDS.map((card) => (
-        <FeatureCard key={card.title} {...card} />
+        <FeatureCard key={card.title} {...card} original={ai ? undefined : card.original} />
       ))}
     </section>
   )

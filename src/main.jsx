@@ -9,6 +9,6 @@ const isAi = window.location.pathname.replace(/\/+$/, '') === '/ai'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App heroImages={isAi ? HERO_IMAGES.ai : HERO_IMAGES.original} />
+    <App heroImages={isAi ? HERO_IMAGES.ai : HERO_IMAGES.original} ai={isAi} />
   </StrictMode>,
 )

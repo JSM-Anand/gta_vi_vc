@@ -67,6 +67,13 @@ export function useViceCityScroll() {
         )
         .to(backdrop, { autoAlpha: 0, duration: 0.5 }, 0.5)
 
+      // The cursor glow (faded out after the Ultimate Edition cards) returns as the text comes in
+      gsap.fromTo(
+        '[data-scroll="glow"]',
+        { '--return': 0 },
+        { '--return': 1, ease: 'none', immediateRender: false, scrollTrigger: { trigger: text, start: 'top bottom', end: '+=30%', scrub: true } },
+      )
+
       gsap
         .timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: text, start: 'top bottom', end: 'bottom top', scrub: true } })
         .fromTo(
