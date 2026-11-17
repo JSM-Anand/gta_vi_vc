@@ -4,12 +4,12 @@ import { useGSAP } from '@gsap/react'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
-// "Ultimate Edition" backdrop, taken from rockstargames.com/VI. The backdrop starts 0.65 screens up,
-// under the trailer cards:
-//   - it's pinned from when it reaches the top until the cards do, and the footage zooms 1 → 1.1
+// "Work with Jarvis" backdrop (the live site's "Ultimate Edition" section), timed from
+// rockstargames.com/VI. The backdrop starts 0.65 screens up, under the showreel cards:
+//   - it's pinned from when it reaches the top until the cards do, and the still zooms 1 → 1.1
+//     (the live site scrubs footage here; we have none, so the still only zooms)
 //   - from when its top is a quarter of the way down the screen, it fades in over one screen
 //     (easing in) while brightening from 20% over the first 61% of that
-//   - the footage plays from first frame to last over the same span, ending as the cards reach the top
 //   - as the cards rise from 80% down the screen (60% on phones) to the top, it fades out, dimming
 //     back to 20% over the last fifth; the glow behind the cards fades out with it
 // The cursor glow comes back as the cards arrive and fades again once they're near the top.
@@ -17,19 +17,8 @@ const $ = (name) => `[data-ue="${name}"]`
 
 export function useUltimateEditionScroll() {
   useGSAP(() => {
-    const video = document.querySelector($('video'))
     const backdrop = $('backdrop')
     const cards = $('cards')
-
-    // Seek once per frame to wherever the scroll says the footage should be. On /ai the target is a
-    // still image: it has no duration, so it only gets the zoom.
-    let progress = 0
-    let frame = 0
-    const seek = () => {
-      frame = 0
-      if (video.duration) video.currentTime = video.duration * progress
-    }
-    video.addEventListener('loadedmetadata', seek)
 
     const mm = gsap.matchMedia()
     mm.add({ all: 'all', motion: '(prefers-reduced-motion: no-preference)', mobile: '(max-width: 767px)' }, (ctx) => {
@@ -37,15 +26,7 @@ export function useUltimateEditionScroll() {
       const pin = { trigger: backdrop, start: 'top top', endTrigger: cards, end: 'top top' }
 
       ScrollTrigger.create({ ...pin, pin: true, pinSpacing: false })
-      ScrollTrigger.create({
-        ...pin,
-        start: 'top 25%',
-        onUpdate: (self) => {
-          progress = self.progress
-          frame ||= requestAnimationFrame(seek)
-        },
-      })
-      if (motion) gsap.fromTo($('video'), { scale: 1 }, { scale: 1.1, ease: 'none', scrollTrigger: { ...pin, scrub: true } })
+      if (motion) gsap.fromTo($('art'), { scale: 1 }, { scale: 1.1, ease: 'none', scrollTrigger: { ...pin, scrub: true } })
 
       // Durations are percentages of each span, as on the live site
       gsap
@@ -68,10 +49,5 @@ export function useUltimateEditionScroll() {
       glow(0, 1, 'top bottom+=25%', 'top bottom')
       glow(1, 0, 'bottom center-=40%', '+=20%')
     })
-
-    return () => {
-      cancelAnimationFrame(frame)
-      video.removeEventListener('loadedmetadata', seek)
-    }
   })
 }

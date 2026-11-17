@@ -1,8 +1,8 @@
 import ArrowIcon from './ArrowIcon'
 
-// Title row of the Shop and Featured News sections: the title on the left, a "View All" link on
-// the right. On phones the link shrinks to its arrow: in a plum disc for Shop (phoneLink="disc"),
-// bare and larger for News (phoneLink="icon"), as on rockstargames.com/VI.
+// Title row of the Selected Work and Writing & Talks sections (the live site's Shop and Featured News): the title on the left, a "View All" link on
+// the right. On phones the link shrinks to its arrow: in a plum disc for Selected Work (phoneLink="disc"),
+// bare and larger for Writing & Talks (phoneLink="icon"), as on rockstargames.com/VI.
 function SectionHeader({ id, title, href, link, color, linkColor, phoneLink }) {
   const phone =
     phoneLink === 'disc'
@@ -21,8 +21,6 @@ function SectionHeader({ id, title, href, link, color, linkColor, phoneLink }) {
       </h2>
       <a
         href={href}
-        target="_blank"
-        rel="noreferrer"
         data-glow
         className={`flex flex-none items-center rounded-full text-(--link) outline-offset-2 transition-colors duration-200 ease-in-out hover:text-cream focus-visible:outline-2 focus-visible:outline-white md:gap-[calc(var(--u)*0.5)] md:text-[calc(var(--u)*1.125)] md:leading-none md:tracking-[-0.015em] ${phone}`}
         style={{ '--link': linkColor }}

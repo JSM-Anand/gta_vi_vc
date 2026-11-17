@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
+import { ABOUT } from '../content'
 
-// "Vice City, USA.", measured on rockstargames.com/VI. A full-screen flight over the city, scrubbed
+// "Jarvis, Miami.", the live site's "Vice City, USA.", measured on rockstargames.com/VI. A full-screen flight over the city, scrubbed
 // by scroll, sits under the trailer cards; the text then scrolls up over it as it fades away.
 // The scroll animation lives in animations/viceCity.js and targets the data-city attributes.
 
@@ -96,14 +97,9 @@ function ViceCity() {
           id="vice-city-title"
           className="text-(length:--title) leading-[1.1] font-bold tracking-[-0.02em]"
         >
-          Vice City, USA.
+          {ABOUT.title}
         </h2>
-        <p className="text-(length:--body) leading-[1.1] font-medium tracking-[-0.0125em]">
-          Jason and Lucia have always known the deck is stacked against them. But when an easy score goes
-          wrong, they find themselves on the darkest side of the sunniest place in America, in the middle of a
-          criminal conspiracy stretching across the state of Leonida — forced to rely on each other more than
-          ever if they want to make it out alive.
-        </p>
+        <p className="text-(length:--body) leading-[1.1] font-medium tracking-[-0.0125em]">{ABOUT.body}</p>
       </div>
     </section>
   )

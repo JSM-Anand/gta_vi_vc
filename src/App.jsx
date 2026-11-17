@@ -17,9 +17,8 @@ import Shop from './components/Shop'
 import UltimateEdition from './components/UltimateEdition'
 import ViceCity from './components/ViceCity'
 
-// The page. `heroImages` swaps the hero's artwork (see heroImages.js); the /ai route passes the AI set
-// and sets `ai`, which also swaps the artwork in every section below it (see aiArt.js).
-function App({ heroImages, ai }) {
+// The page. Copy lives in content.js, artwork in art.js and assets/hero.
+function App() {
   const [loading, setLoading] = useState(true)
   const [intro, setIntro] = useState(false)
 
@@ -38,13 +37,13 @@ function App({ heroImages, ai }) {
       <CursorGlow />
       <Navbar />
       <main>
-        <Hero images={heroImages} />
-        <ExtendedLook ai={ai} />
-        <UltimateEdition ai={ai} />
+        <Hero />
+        <ExtendedLook />
+        <UltimateEdition />
         <ViceCity />
-        <Features ai={ai} />
-        <Shop ai={ai} />
-        <News ai={ai} />
+        <Features />
+        <Shop />
+        <News />
       </main>
       <Footer />
     </>

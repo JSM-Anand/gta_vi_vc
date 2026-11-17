@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP)
 //   - the hero shrinks to 90%
 //   - the poster, date, button and badges fade out; the logo lingers and fades more slowly
 //   - the cursor glow fades away
-//   - a Pre-Order pill appears in the nav once the hero's button has gone
+//   - a Hire pill appears in the nav (the live site's Pre-Order pill) once the hero's button has gone
 //   - the next section (animations/extendedLook.js) fades in where the hero was
 // Positions are fractions of the window height, so they scale with it as on the live site.
 export function useHeroScroll() {

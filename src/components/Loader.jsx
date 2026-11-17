@@ -5,7 +5,7 @@ import loaderLogo from '../assets/icons/loader-logo.svg'
 
 gsap.registerPlugin(useGSAP)
 
-// Full-screen loader: the R* outline with a light sweeping across it.
+// Full-screen loader: the J monogram with a light sweeping across it (the live site uses its R* mark).
 // Stays up until every image matching `images` has decoded and the fonts are ready,
 // then finishes the current sweep and fades out. Calls onExit as the exit starts
 // (the hero intro plays underneath it) and onDone once it's gone.

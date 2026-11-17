@@ -1,46 +1,33 @@
-import merchArt from '../assets/images/GTAVI_Merch_PromoCard.0_k5n2lk~h9h~.avif'
-import collectorsArt from '../assets/images/collectorsMobile.09~60xnm5q~pr.avif'
-import { AI_ART } from '../aiArt'
+import { WORK } from '../content'
 import ArrowIcon from './ArrowIcon'
 import Carousel from './Carousel'
 import SectionHeader from './SectionHeader'
 
-// "Shop", after the feature cards, measured on rockstargames.com/VI. Two cards in a row (a
-// carousel on phones), each laid out like a feature card on a phone: a 3:2 space for the
-// artwork, then the text. No scroll animation on the live site; only hover.
+// "Selected Work", the live site's "Shop" after the feature cards, measured on rockstargames.com/VI.
+// Two cards in a row (a carousel on phones), each laid out like a feature card on a phone: a 3:2
+// space for the artwork, then the text. No scroll animation on the live site; only hover.
 // From md up, sizes are multiples of --u (defined in index.css); phones use vw like the live site.
-// The /ai route swaps in our own artwork (see aiArt.js).
 
-const STORE = 'https://store.rockstargames.com'
-
-const CARDS = [
+// The live site's theme values for its two cards. Both are photos here, so both are faded towards
+// the text (on the live site the second card's art is a cut-out on the card colour, unfaded).
+// Title sizes are the live site's.
+const STYLES = [
   {
-    eyebrow: 'Merchandise',
-    title: 'Premium apparel, collectibles, and more',
-    cta: 'Shop Now',
-    href: `${STORE}/grand-theft-auto-vi-collection`,
-    art: merchArt,
-    aiArt: AI_ART.merch,
-    // Only the photo is faded towards the text; the collector's box art is a cut-out on the card colour
     fade: true,
     titleSize: 'md:text-[calc(var(--u)*3)]',
     colors: { bg: '#20234c', eyebrow: '#fbd9e0', button: '#ffd4a8', buttonHover: '#ffc080', buttonText: '#0f0c1a', glow: '#3f284b' },
   },
   {
-    eyebrow: 'Collector’s Box',
-    title: 'The Vice City Collection',
-    cta: 'Explore Now',
-    art: collectorsArt,
-    aiArt: AI_ART.collectors,
+    fade: true,
     titleSize: 'md:text-[calc(var(--u)*3.25)]',
     colors: { bg: '#252644', eyebrow: '#e5ddff', button: '#ffb2c6', buttonHover: '#fc97b1', buttonText: '#0c0d1b', glow: '#2f2e52' },
   },
 ]
 
 function ShopCard({ eyebrow, title, cta, href, art, fade, titleSize, colors }) {
-  // The first card links to the store; the second opens a modal on the live site, so it's a button
+  // A card with no link yet is a button (on the live site the second card opens a modal)
   const Tag = href ? 'a' : 'button'
-  const link = href ? { href, target: '_blank', rel: 'noreferrer' } : { type: 'button' }
+  const link = href ? { href } : { type: 'button' }
 
   return (
     <Tag
@@ -71,18 +58,18 @@ function ShopCard({ eyebrow, title, cta, href, art, fade, titleSize, colors }) {
   )
 }
 
-function Shop({ ai }) {
+function Shop() {
   return (
     <section
       id="shop"
       aria-labelledby="shop-title"
       className="flex flex-col gap-[8vw] py-[10vw] md:gap-[calc(var(--u)*2)] md:py-[calc(var(--u)*4)] md:px-[7.5vw] lg:px-[10vw] hd:px-[13vw] fhd:px-[min(16vw,409.6px)]"
     >
-      <SectionHeader id="shop-title" title="Shop" href={STORE} link="View All" color="#ffd4a8" linkColor="#fee8ea" phoneLink="disc" />
+      <SectionHeader id="shop-title" title={WORK.title} href={WORK.href} link={WORK.link} color="#ffd4a8" linkColor="#fee8ea" phoneLink="disc" />
       <div>
         <Carousel className="gap-3 md:gap-4 lg:gap-[18px] hd:gap-[22.5px] fhd:gap-[25px]">
-          {CARDS.map(({ aiArt, ...card }) => (
-            <ShopCard key={card.title} {...card} art={ai ? aiArt : card.art} />
+          {WORK.cards.map((card, i) => (
+            <ShopCard key={card.title} {...card} {...STYLES[i]} />
           ))}
         </Carousel>
       </div>

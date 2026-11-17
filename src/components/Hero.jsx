@@ -1,10 +1,19 @@
 import { useRef } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
-import { HERO_IMAGES } from '../heroImages'
-import { PS5Logo, XboxSeriesLogo } from './PlatformLogos'
+import { HERO, PROFILE } from '../content'
 
 gsap.registerPlugin(useGSAP)
+
+// Hero layers: a desktop (16:9) and a mobile (square) version of each, with the same name. Every
+// layer is a full canvas with its piece already in place. The pieces are our AI panels cut to the
+// live site's shapes; the logo layers (the J mark and the wordmark) sit where its logo did.
+const byName = (files) =>
+  Object.fromEntries(Object.entries(files).map(([path, url]) => [path.split('/').pop().replace('.avif', ''), url]))
+const IMAGES = {
+  desktop: byName(import.meta.glob('../assets/hero/desktop/*.avif', { eager: true, import: 'default' })),
+  mobile: byName(import.meta.glob('../assets/hero/mobile/*.avif', { eager: true, import: 'default' })),
+}
 
 const MOBILE = '(max-width: 767px)'
 
@@ -18,7 +27,7 @@ function Art({ src, alt = '', className = '', ...props }) {
   )
 }
 
-// Pre-Order button states, measured on the live site. Shadows list the dark layer first so
+// Hire button states, measured on the live site. Shadows list the dark layer first so
 // GSAP can tween between them (both layers exist in every state).
 const PULSE_LOW = {
   backgroundColor: '#ffb4c7',
@@ -58,13 +67,13 @@ function ScrollArrow() {
 // The intro (animations/heroIntro.js) draws on the canvas and targets the data-intro attributes;
 // the scroll effect (animations/heroScroll.js) pins the section, shrinks the content layer and
 // fades it through --hero-fade (a filter, so it doesn't fight the intro's opacity tweens).
-function Hero({ images = HERO_IMAGES.original }) {
+function Hero() {
   const button = useRef(null)
-  const art = (name) => ({ desktop: images.desktop[name], mobile: images.mobile[name] })
+  const art = (name) => ({ desktop: IMAGES.desktop[name], mobile: IMAGES.mobile[name] })
   const SHARDS = Array.from({ length: 9 }, (_, i) => art(`shard-0${i + 1}`))
   const FILLER = art('shard-10')
 
-  // Pre-Order button: a slow colour pulse, interrupted by a hover/focus state
+  // Hire button: a slow colour pulse, interrupted by a hover/focus state
   useGSAP(() => {
     const el = button.current
     gsap.set(el, PULSE_LOW)
@@ -94,7 +103,9 @@ function Hero({ images = HERO_IMAGES.original }) {
 
   return (
     <section id="hero" className="relative z-[1] overflow-clip">
-      <h1 className="sr-only">Grand Theft Auto VI</h1>
+      <h1 className="sr-only">
+        {PROFILE.name}, {PROFILE.role}
+      </h1>
 
       <div
         data-scroll="content"
@@ -129,7 +140,7 @@ function Hero({ images = HERO_IMAGES.original }) {
 
             {/* Static poster: the logo layer sits exactly over the logo baked into the poster */}
             <div data-intro="poster" className="absolute inset-0">
-              <Art src={art('poster')} alt="Grand Theft Auto VI key art" fetchPriority="high" className="[filter:opacity(var(--hero-fade,1))]" />
+              <Art src={art('poster')} alt={`${PROFILE.name}, ${PROFILE.role}: collage of project artwork`} fetchPriority="high" className="[filter:opacity(var(--hero-fade,1))]" />
               <Art src={art('poster-logo')} data-scroll="poster-logo" />
             </div>
           </div>
@@ -138,9 +149,9 @@ function Hero({ images = HERO_IMAGES.original }) {
             data-intro="text"
             className="order-1 [filter:opacity(var(--hero-fade,1))] text-center text-[6vw] leading-none tracking-[-0.01em] uppercase text-shadow-[0_0_28px_rgb(230_220_255/0.25)] md:order-0 md:justify-self-start md:px-[calc(var(--u)*0.625)] md:text-left md:text-[calc(var(--u)*1.5)] md:leading-[1.2]"
           >
-            Coming
+            {HERO.status[0]}
             <br />
-            November 19, 2026
+            {HERO.status[1]}
           </p>
 
           <button
@@ -150,17 +161,18 @@ function Hero({ images = HERO_IMAGES.original }) {
             data-glow
             className="order-4 mt-[4.5vw] [filter:opacity(var(--hero-fade,1))] flex h-[12vw] cursor-pointer items-center rounded-full bg-pink px-[6vw] text-[4vw] leading-none tracking-[-0.015em] text-plum shadow-[0_2px_53px_rgb(255_178_199/0.19)] outline-offset-4 focus-visible:outline-2 focus-visible:outline-pink md:order-0 md:mt-0 md:h-[calc(var(--u)*3.5)] md:px-[calc(var(--u)*1.75)] md:text-[calc(var(--u)*1.125)]"
           >
-            Pre-Order Now
+            {HERO.cta}
           </button>
 
-          <div
+          {/* Where the live site has its platform logos: two short facts, as tall as the logos were */}
+          <ul
             data-intro="text"
-            className="order-3 mt-[9.5vw] [filter:opacity(var(--hero-fade,1))] flex items-center gap-x-[6vw] md:order-0 md:mt-0 md:flex-col md:items-end md:gap-y-[calc(var(--u)*0.75)] md:justify-self-end md:px-[calc(var(--u)*0.625)]"
+            className="order-3 mt-[9.5vw] [filter:opacity(var(--hero-fade,1))] flex items-center gap-x-[6vw] font-condensed text-[4.5vw] leading-none font-bold tracking-[0.02em] uppercase md:order-0 md:mt-0 md:flex-col md:items-end md:gap-y-[calc(var(--u)*0.75)] md:justify-self-end md:px-[calc(var(--u)*0.625)] md:text-[calc(var(--u)*1.25)]"
           >
-            <span className="sr-only">Available on PlayStation 5 and Xbox Series X|S</span>
-            <PS5Logo className="h-[4.5vw] md:h-[calc(var(--u)*1.25)]" />
-            <XboxSeriesLogo className="h-[4.5vw] md:h-[calc(var(--u)*1.25)]" />
-          </div>
+            {HERO.facts.map((fact) => (
+              <li key={fact}>{fact}</li>
+            ))}
+          </ul>
         </div>
 
         {/* Scroll hint: dismissed for good once the page is scrolled */}

@@ -8,6 +8,9 @@ gsap.registerPlugin(useGSAP)
 // values below; a ticker draws them. Every time and ease was measured from the live site's
 // canvas calls and fitted to GSAP eases. Times are seconds from when the first shard moves (T0).
 
+// The logo slots keep the live site's names: `vi` is the big mark (our J) and `gta` the wordmark
+// that wipes on over it (our JARVIS / CREATIVE DEVELOPER).
+
 // T0 comes this long after the loader starts its exit
 export const INTRO_DELAY = 0.64
 
@@ -185,13 +188,13 @@ export function useHeroIntro(play) {
       // The small piece behind the logo just fades up
       tween(state, { filler: 1, ease: 'sine.inOut' }, 1.85, 2.32)
 
-      // VI settles in and fades up, with a pink glow that swells and fades
+      // The J (the live site's VI) settles in and fades up, with a pink glow that swells and fades
       tween(state.vi, { p: 1, ease: 'power3.out' }, 1.02, 2.04)
       tween(state.vi, { alpha: 1, ease: 'none' }, 1.11, 1.67)
       tween(state.vi, { glow: 1, ease: 'none' }, 1.48, 2.41)
       tween(state.vi, { glow: 0, ease: 'power2.in' }, 2.46, 3.58)
 
-      // "grand theft auto" settles in and wipes on top to bottom, over a warm glow
+      // The wordmark settles in and wipes on top to bottom, over a warm glow
       tween(state.gta, { p: 1, ease: 'power3.out' }, 1.06, 2.05)
       tween(state.gta, { wipe: 1, ease: 'power1.out' }, 1.11, 3.24)
       tween(state.gta, { glow: 1, ease: 'none' }, 1.91, 2.46)

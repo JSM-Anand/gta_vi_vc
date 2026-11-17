@@ -52,8 +52,8 @@
 
 @theme {
   --color-ink: #0c0d1b; /* page background on rockstargames.com/VI */
-  --color-pink: #ffb4c7; /* Pre-Order button (start of its pulse) */
-  --color-plum: #342d50; /* Pre-Order button text (start of its pulse) */
+  --color-pink: #ffb4c7; /* Hire button (start of its pulse) */
+  --color-plum: #342d50; /* Hire button text (start of its pulse) */
   --color-cream: #fff9cb; /* nav icons on hover */
   --color-glow: #1f1f38; /* cursor glow */
 
